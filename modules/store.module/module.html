@@ -1,1 +1,99 @@
-<h1>Work in progress, Shopify Store Migration!</h1>
+<shopify-store
+	store-domain="https://sigmetrix.myshopify.com/"
+></shopify-store>
+
+<section class="store">
+	<div class="content-wrapper">
+		{% if dynamic_page_hubdb_row %}
+			<h3>{{ dynamic_page_hubdb_row.hs_name }}</h3>
+		{% elif dynamic_page_hubdb_table_id %}
+
+			{% set current_page = request.query_dict.page|default(1)|int %}
+			
+			{# Pagination variables #}
+			{% set rows_per_page = 9 %}
+			{% set offset = (current_page - 1) * rows_per_page %}
+			{% set total_rows = hubdb_table(dynamic_page_hubdb_table_id).row_count %}
+			{% set total_pages = (total_rows / rows_per_page)|round(0, 'ceil') %}
+
+			{# Query HubDB with limit + offset #}
+			{% set table = hubdb_table_rows(
+				dynamic_page_hubdb_table_id,
+				"offset=" ~ offset ~ "&limit=" ~ rows_per_page
+			) %}
+
+			<div class="store__products">
+				{% if table|length %}
+					{% for row in table %}
+						<div class="store__product">
+							<div class="store__product-media">
+								<a class="store__product-img-wrapper" href="{{request.path}}/{{row.hs_path}}">
+									<img
+										class="store__product-img"
+										src="{{ row.image.url }}"
+										alt="{{ row.image.altText }}"
+										height="216"
+										width="384"
+									>
+								</a>
+							</div>
+							<div class="store__product-content">
+								<h3 class="store__product-title">
+									<a href="{{request.path}}/{{row.hs_path}}">
+										{{ row.hs_name }}
+									</a>
+								</h3>
+								<p class="store__product-price">
+									{{ row.price }}
+								</p>
+								<div class="store__product-desc">
+									{{ row.description }}
+								</div>
+							</div>
+							<div class="store__product-cta">
+								<a class="btn btn--store" href="{{request.path}}/{{row.hs_path}}">
+									Learn More
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p>No products found.</p>
+				{% endif %}
+			</div>
+
+			{# Pagination #}
+
+			{% if total_pages > 1 %}
+				<ul class="store__pagination">
+					{# Previous #}
+					{% if current_page > 1 %}
+						<li>
+							<a href="?page={{ current_page - 1 }}">
+								Previous
+							</a>
+						</li>
+					{% endif %}
+
+					{# Page numbers #}
+					{% for page in range(1, total_pages + 1) %}
+						<li class="{{ 'active' if page == current_page }}">
+							<a href="?page={{ page }}">
+								{{ page }}
+							</a>
+						</li>
+					{% endfor %}
+
+					{# Next #}
+					{% if current_page < total_pages %}
+						<li>
+							<a href="?page={{ current_page + 1 }}">
+								Next
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			{% endif %}
+		{% endif %}
+	</div>
+</section>
