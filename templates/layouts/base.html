@@ -18,7 +18,7 @@ templateType: none
 		{{ require_css(get_asset_url("../../css/theme-overrides.css")) }}
 
 		{{ require_js(get_asset_url("../../child.js")) }}
-		{% if request.path == '/store' %}
+		{% if request.path == '/store' or request.path == '/marketplace' %}
 			{% require_js position="head" %}
 				<script src="https://cdn.shopify.com/storefront/web-components.js"></script>
 			{% end_require_js %}

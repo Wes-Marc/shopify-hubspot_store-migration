@@ -22,10 +22,20 @@
 				"offset=" ~ offset ~ "&limit=" ~ rows_per_page
 			) %}
 
+			{# Hide last 3 products in first load #}
+			{% if request.query_dict.page is none %}
+				{% set hide_product = true %}
+			{% else %}
+				{% set hide_product = false %}
+			{% endif %}
+
 			<div class="store__products">
 				{% if table|length %}
 					{% for row in table %}
-						<div class="store__product">
+						<div
+							id="store__product"
+							class="store__product {{ loop.index > 6 and hide_product ? 'store__product--hidden' : '' }}"
+						>
 							<div class="store__product-media">
 								<a class="store__product-img-wrapper" href="{{request.path}}/{{row.hs_path}}">
 									<img
@@ -38,61 +48,73 @@
 								</a>
 							</div>
 							<div class="store__product-content">
-								<h3 class="store__product-title">
-									<a href="{{request.path}}/{{row.hs_path}}">
+								<h2 class="store__product-title">
+									<a class="store__product-link" href="{{request.path}}/{{row.hs_path}}">
 										{{ row.hs_name }}
 									</a>
-								</h3>
+								</h2>
 								<p class="store__product-price">
-									{{ row.price }}
+									{{ row.price|format_currency_value(locale='en-US', currency='USD', maxDecimalDigits=6, minDecimalDigits=2) }} USD
 								</p>
 								<div class="store__product-desc">
 									{{ row.description }}
 								</div>
 							</div>
 							<div class="store__product-cta">
-								<a class="btn btn--store" href="{{request.path}}/{{row.hs_path}}">
+								<a class="btn--store btn--outline-secondary btn--small" href="{{request.path}}/{{row.hs_path}}">
 									Learn More
 								</a>
 							</div>
 						</div>
 					{% endfor %}
 				{% else %}
-					<p>No products found.</p>
+					<h2>No products found.</h2>
 				{% endif %}
+			</div>
+			
+			<div class="btn__view-more-wrapper {{ !hide_product ? 'btn__view-more-wrapper--hidden' : '' }}">
+				<button class="btn__view-more">
+					View More
+				</button>
 			</div>
 
 			{# Pagination #}
 
 			{% if total_pages > 1 %}
-				<ul class="store__pagination">
-					{# Previous #}
-					{% if current_page > 1 %}
-						<li>
-							<a href="?page={{ current_page - 1 }}">
-								Previous
-							</a>
-						</li>
-					{% endif %}
-
-					{# Page numbers #}
-					{% for page in range(1, total_pages + 1) %}
-						<li class="{{ 'active' if page == current_page }}">
-							<a href="?page={{ page }}">
-								{{ page }}
-							</a>
-						</li>
-					{% endfor %}
-
-					{# Next #}
-					{% if current_page < total_pages %}
-						<li>
-							<a href="?page={{ current_page + 1 }}">
-								Next
-							</a>
-						</li>
-					{% endif %}
-				</ul>
+				<nav class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}">
+					<ul class="pagination">
+						{# Previous #}
+						{% if current_page > 1 %}
+							<li>
+								<a class="pagination__previous" href="?page={{ current_page - 1 }}">
+									<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 320 512">
+										<path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
+									</svg>
+								</a>
+							</li>
+						{% endif %}
+	
+						{# Page numbers #}
+						{% for page in range(1, total_pages + 1) %}
+							<li class="{{ 'active' if page == current_page }}">
+								<a class="pagination__number" href="?page={{ page }}">
+									{{ page }}
+								</a>
+							</li>
+						{% endfor %}
+	
+						{# Next #}
+						{% if current_page < total_pages %}
+							<li>
+								<a class="pagination__next" href="?page={{ current_page + 1 }}">
+									<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 320 512">
+										<path d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
+									</svg>
+								</a>
+							</li>
+						{% endif %}
+					</ul>
+				</nav>
 			{% endif %}
 		{% endif %}
 	</div>
