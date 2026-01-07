@@ -12,6 +12,7 @@
 	--color-body-txt: #222224;
 	--color-btn-accent: #049B91;
 	--color-btn-outline: #222224;
+	--color-btn-outline-hover: #D9DEE4;
 	--color-btn-outline-secondary: #73305C;
 	--color-btn-outline-secondary-active: #5c2749;
 	--color-brand-purple: #73305C;
@@ -30,6 +31,12 @@
 	}
 }
 
+.btn--category {
+	display: inline-block;
+	border-radius: 6.25rem;
+	font-weight: 700;
+}
+
 .btn--store {
 	display: inline-block;
 	border-radius: 0.75rem;
@@ -44,12 +51,18 @@
 
 .btn--outline {
 	color: var(--color-btn-outline);
-	outline: 1px solid var(--color-btn-outline);
+	border: 2px solid var(--color-btn-outline);
+}
+
+.btn--outline:hover,
+.btn--outline:focus {
+	background-color: var(--color-btn-outline-hover);
+	color: var(--color-btn-outline);
 }
 
 .btn--outline-secondary {
 	color: var(--color-btn-outline-secondary);
-	outline: 2px solid var(--color-btn-outline-secondary);
+	border: 2px solid var(--color-btn-outline-secondary);
 }
 
 .btn--outline-secondary:hover,

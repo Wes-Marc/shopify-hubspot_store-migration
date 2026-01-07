@@ -9,18 +9,27 @@
 		{% elif dynamic_page_hubdb_table_id %}
 
 			{% set current_page = request.query_dict.page|default(1)|int %}
+			{% set category = request.query_dict.category|default('') %}
 			
 			{# Pagination variables #}
 			{% set rows_per_page = 9 %}
 			{% set offset = (current_page - 1) * rows_per_page %}
-			{% set total_rows = hubdb_table(dynamic_page_hubdb_table_id).row_count %}
-			{% set total_pages = (total_rows / rows_per_page)|round(0, 'ceil') %}
+
+			{# Dynamic query options for category queries #}
+			{% set query_options = "offset=" ~ offset ~ "&limit=" ~ rows_per_page %}
+
+			{% if category %}
+				{% set query_options = query_options ~ "&category__contains=" ~ category %}
+			{% endif %}
 
 			{# Query HubDB with limit + offset #}
 			{% set table = hubdb_table_rows(
 				dynamic_page_hubdb_table_id,
-				"offset=" ~ offset ~ "&limit=" ~ rows_per_page
+				query_options
 			) %}
+
+			{% set total_rows = table.totalCount %}
+			{% set total_pages = (total_rows / rows_per_page)|round(0, 'ceil') %}
 
 			{# Hide last 3 products in first load #}
 			{% if request.query_dict.page is none %}
@@ -28,6 +37,42 @@
 			{% else %}
 				{% set hide_product = false %}
 			{% endif %}
+
+			{# Retrieve categories #}
+			{% set category_table = hubdb_table_rows(dynamic_page_hubdb_table_id) %}
+
+			{% set categories = [] %}
+
+			{% for row in category_table %}
+				{% if row.category %}
+
+					{# Split on ">" and take the first word #}
+					{% set base_category = row.category|split('>')|first %}
+					
+					{% if base_category not in categories %}
+						{% do categories.append(base_category) %}
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+
+			{% set active_category = request.query_dict.category|default('') %}
+
+			<div class="store__categories-wrapper">
+				<nav aria-label="Product categories">
+					<ul class="store__categories">
+						<li class="{{ 'active' if not active_category }}">
+							<a class="btn--category btn--outline btn--small" href="?page=1">All</a>
+						</li>
+						{% for category in categories %}
+							<li class="{{ 'active' if category == active_category }}">
+								<a class="btn--category btn--outline btn--small" href="?page=1&category={{ category }}">
+									{{ category }}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</nav>
+			</div>
 
 			<div class="store__products">
 				{% if table|length %}
@@ -80,13 +125,13 @@
 
 			{# Pagination #}
 
-			{% if total_pages > 1 %}
-				<nav class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}">
+			{% if total_pages >= 1 %}
+				<nav class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}" aria-label="Pagination">
 					<ul class="pagination">
 						{# Previous #}
 						{% if current_page > 1 %}
 							<li>
-								<a class="pagination__previous" href="?page={{ current_page - 1 }}">
+								<a class="pagination__previous" href="?page={{ current_page - 1 }}{% if category %}&category={{ category }}{% endif %}">
 									<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 320 512">
 										<path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
 									</svg>
@@ -97,7 +142,7 @@
 						{# Page numbers #}
 						{% for page in range(1, total_pages + 1) %}
 							<li class="{{ 'active' if page == current_page }}">
-								<a class="pagination__number" href="?page={{ page }}">
+								<a class="pagination__number" href="?page={{ page }}{% if category %}&category={{ category }}{% endif %}">
 									{{ page }}
 								</a>
 							</li>
@@ -106,7 +151,7 @@
 						{# Next #}
 						{% if current_page < total_pages %}
 							<li>
-								<a class="pagination__next" href="?page={{ current_page + 1 }}">
+								<a class="pagination__next" href="?page={{ current_page + 1 }}{% if category %}&category={{ category }}{% endif %}">
 									<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 320 512">
 										<path d="M311.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L243.2 256 73.9 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
 									</svg>

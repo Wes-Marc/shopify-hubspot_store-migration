@@ -1,7 +1,25 @@
+.store__categories-wrapper {
+	margin-block-end: 1.875rem;
+}
+
+.store__categories {
+	display: flex;
+	gap: 1.5625rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.store__categories .active .btn--category {
+	background-color: var(--color-brand-purple);
+	border: 2px solid var(--color-brand-purple);
+	color: #ffffff;
+}
+
 .store__products {
 	display: grid;
 	gap: 1.875rem 1.25rem;
-	grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(288px, 386.67px));
 }
 
 .store__product {
