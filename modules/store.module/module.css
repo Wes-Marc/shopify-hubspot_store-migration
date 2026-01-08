@@ -4,10 +4,16 @@
 
 .store__categories {
 	display: flex;
-	gap: 1.5625rem;
+	flex-wrap: wrap;
+	gap: 0.5rem;
 	list-style: none;
 	margin: 0;
 	padding: 0;
+}
+@media screen and (min-width: 768px) {
+	.store__categories {
+		gap: 1.5625rem;
+	}
 }
 
 .store__categories .active .btn--category {
@@ -16,15 +22,103 @@
 	color: #ffffff;
 }
 
+/* FILTER BUTTON FOR MOBILE */
+
+.filter-btn--mobile {
+	display: list-item;
+}
+@media screen and (min-width: 768px) {
+	.filter-btn--mobile {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.filter-btn--mobile ~ li {
+		height: 0;
+		opacity: 0;
+		transform: translateX(-5%);
+		transition: all 0.2s ease-in;
+		visibility: hidden;
+	}
+	
+	.filter-btn--mobile.active ~ li {
+		height: auto;
+		opacity: 1;
+		transform: translateX(0);
+		visibility: visible;
+	}
+}
+
+.filter-btn__button,
+.filter-btn__button:hover,
+.filter-btn__button:focus {
+	align-items: center;
+	background-color: var(--color-btn-accent);
+	border: 2px solid var(--color-btn-accent);
+	display: inline-flex;
+	border-radius: 6.25rem;
+	height: 3rem;
+	justify-content: center;
+	padding: 0.75rem;
+	position: relative;
+	width: 3rem;
+}
+
+.filter-btn__top,
+.filter-btn__middle,
+.filter-btn__bottom {
+	background-color: #ffffff;
+	height: 0.125rem;
+	left: 50%;
+	position: absolute;
+	transform: translateX(-50%);
+	transition: all 0.2s;
+	transform-origin: center;
+}
+
+.filter-btn__top {
+	top: 38%;
+	width: 35%;
+}
+
+.filter-btn__middle {
+	top: 48%;
+	width: 26%;
+}
+
+.filter-btn__bottom {
+	top: 56%;
+	width: 10%;
+}
+
+.filter-btn__button--active .filter-btn__top {
+	top: 48%;
+	transform: translateX(-50%) rotate(45deg);
+}
+
+.filter-btn__button--active .filter-btn__middle {
+	top: 48%;
+	transform: translateX(-50%) rotate(-45deg);
+	width: 35%;
+}
+
+.filter-btn__button--active .filter-btn__bottom {
+	opacity: 0;
+}
+
+/* PRODUCTS */
+
 .store__products {
 	display: grid;
 	gap: 1.875rem 1.25rem;
-	grid-template-columns: repeat(auto-fit, minmax(288px, 386.67px));
+	grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
 }
 
 .store__product {
 	display: flex;
 	flex-direction: column;
+	max-width: 386.67px;
 }
 
 .store__product--hidden {
@@ -118,6 +212,8 @@
 	text-decoration: underline;
 	text-underline-offset: 0.5rem;
 }
+
+/* PAGINATION */
 
 .store__pagination {
 	margin-block-start: 3.125rem;
