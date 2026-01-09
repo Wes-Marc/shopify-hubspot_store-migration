@@ -1,62 +1,219 @@
-<shopify-store
-	store-domain="https://sigmetrix.myshopify.com/"
-></shopify-store>
+{% if dynamic_page_hubdb_row %}
+	{% require_js position="footer" %}
+		<script>
+			let productQuantity = 1;
 
-<section class="store">
-	<div class="content-wrapper">
-		{% if dynamic_page_hubdb_row %}
-			<h3>{{ dynamic_page_hubdb_row.hs_name }}</h3>
-		{% elif dynamic_page_hubdb_table_id %}
+			function decreaseValue() {
+				const countDisplay = document.getElementById('product__count');
+				
+				if (productQuantity > 1) {
+					countDisplay.value = --productQuantity;
+				}
+			}
 
-			{% set current_page = request.query_dict.page|default(1)|int %}
-			{% set category = request.query_dict.category|default('') %}
+			function increaseValue() {
+				document.getElementById('product__count').value = ++productQuantity;
+			}
+
+			function addToCart() {
+				const count = document.getElementById('product__count').value;
+				const cart = document.getElementById('shopify__cart');
+				for (let i = 0; i < count; i++) {
+					cart.addLine(event);
+				}
+
+				cart.showModal();
+			}
+		</script>
+	{% end_require_js %}
+
+	{% set product = dynamic_page_hubdb_row %}
+	<section class="product">
+		<div class="content-wrapper">
+			<shopify-store
+				id="shopify-store"
+				store-domain="https://sigmetrix.myshopify.com/"
+			></shopify-store>
+
+			<shopify-cart id="shopify__cart" target="_blank"></shopify-cart>
+
+			<div class="product__hero">
+				<div class="product__media">
+					<img
+						class="product__img"
+						src="{{ product.image.url }}"
+						alt="{{ product.image.altText }}"
+						height="216"
+						width="384"
+					>
+				</div>
+				<div class="product__info">
+					<div class="product__content-wrapper">
+						<h1 class="product__name">
+							{{ product.name }}
+						</h1>
+						<p class="product__price">
+							{{ product.price|format_currency_value(locale='en-US', currency='USD', maxDecimalDigits=6, minDecimalDigits=2) }} USD
+						</p>
+						<div class="product__short-description">
+							{{ product.short_description }}
+						</div>
+					</div>
+					<div class="product__buy">
+						<shopify-context
+							type="product"
+							handle="{{ product.hs_path }}"
+						>
+							<template>
+								<div class="product__quantity">
+									<label class="product__quantity-label" for="product__count">Quantity</label>
+									<div class="product__quantity-input">
+										<button class="btn--decrease" onclick="decreaseValue()">-</button>
+										<input type="number" class="product__count" id="product__count" name="quantity" min="1" max="null" value="1" step="1">
+										<button class="btn--increase" onclick="increaseValue()">+</button>
+									</div>
+								</div>
+								<div class="product__buy-buttons">
+									<button
+										class="btn--add-to-cart btn--outline btn--small"
+										onclick="addToCart()"
+									>
+										Add to cart
+									</button>
+									<button
+										class="btn--buy-now btn--secondary btn--small"
+										onclick="getElementById('shopify-store').buyNow(event, {target: '_blank'});"
+									>
+										Buy now
+									</button>
+								</div>
+							</template>
+						</shopify-context>
+					</div>
+				</div>
+			</div>
+			<div class="product__description-wrapper">
+				<h2 class="product__description-title">
+					Course Description
+				</h2>
+				<div class="product__description">
+					{{ product.description }}
+					
+					{% unless product.description %}
+						{{ product.short_description }}
+					{% endunless %}
+				</div>
+			</div>
 			
-			{# Pagination variables #}
-			{% set rows_per_page = 9 %}
-			{% set offset = (current_page - 1) * rows_per_page %}
+			{# Query HubDB by category with limit #}
+			{% set query_options = "category__contains=" ~ product.category|split('>')|first ~ "&name__not_like=" ~ product.name ~ "&limit=3" %}
 
-			{# Dynamic query options for category queries #}
-			{% set query_options = "offset=" ~ offset ~ "&limit=" ~ rows_per_page %}
-
-			{% if category %}
-				{% set query_options = query_options ~ "&category__contains=" ~ category %}
-			{% endif %}
-
-			{# Query HubDB with limit + offset #}
 			{% set table = hubdb_table_rows(
 				dynamic_page_hubdb_table_id,
 				query_options
 			) %}
 
-			{% set total_rows = table.totalCount %}
-			{% set total_pages = (total_rows / rows_per_page)|round(0, 'ceil') %}
-
-			{# Hide last 3 products in first load #}
-			{% if request.query_dict.page is none %}
-				{% set hide_product = true %}
-			{% else %}
-				{% set hide_product = false %}
+			{% if table|length %}
+				<div class="product__recommended-wrapper">
+					<h2 class="product__recommended-title">
+						Related Courses
+					</h2>
+					<div class="store__products">
+						{% for row in table %}
+							<div
+								id="store__product"
+								class="store__product"
+							>
+								<div class="store__product-media">
+									<a class="store__product-img-wrapper" href="/{{request.path|split('/')|first}}/{{row.hs_path}}">
+										<img
+											class="store__product-img"
+											src="{{ row.image.url }}"
+											alt="{{ row.image.altText }}"
+											height="216"
+											width="384"
+										>
+									</a>
+								</div>
+								<div class="store__product-content">
+									<h2 class="store__product-title">
+										<a class="store__product-link" href="/{{request.path|split('/')|first}}/{{row.hs_path}}">
+											{{ row.hs_name }}
+										</a>
+									</h2>
+									<p class="store__product-price">
+										{{ row.price|format_currency_value(locale='en-US', currency='USD', maxDecimalDigits=6, minDecimalDigits=2) }} USD
+									</p>
+									<div class="store__product-desc">
+										{{ row.short_description }}
+									</div>
+								</div>
+								<div class="store__product-cta">
+									<a class="btn--store btn--outline-secondary btn--small" href="/{{request.path|split('/')|first}}/{{row.hs_path}}">
+										Learn More
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
 			{% endif %}
+		</div>
+	</section>
+	
+{% elif dynamic_page_hubdb_table_id %}
 
-			{# Retrieve categories #}
-			{% set category_table = hubdb_table_rows(dynamic_page_hubdb_table_id) %}
+	{% set current_page = request.query_dict.page|default(1)|int %}
+	{% set category = request.query_dict.category|default('') %}
+	
+	{# Pagination variables #}
+	{% set rows_per_page = 9 %}
+	{% set offset = (current_page - 1) * rows_per_page %}
 
-			{% set categories = [] %}
+	{# Dynamic query options for category queries #}
+	{% set query_options = "offset=" ~ offset ~ "&limit=" ~ rows_per_page %}
 
-			{% for row in category_table %}
-				{% if row.category %}
+	{% if category %}
+		{% set query_options = query_options ~ "&category__contains=" ~ category %}
+	{% endif %}
 
-					{# Split on ">" and take the first word #}
-					{% set base_category = row.category|split('>')|first %}
-					
-					{% if base_category not in categories %}
-						{% do categories.append(base_category) %}
-					{% endif %}
-				{% endif %}
-			{% endfor %}
+	{# Query HubDB with limit + offset #}
+	{% set table = hubdb_table_rows(
+		dynamic_page_hubdb_table_id,
+		query_options
+	) %}
 
-			{% set active_category = request.query_dict.category|default('') %}
+	{% set total_rows = table.totalCount %}
+	{% set total_pages = (total_rows / rows_per_page)|round(0, 'ceil') %}
 
+	{# Hide last 3 products in first load #}
+	{% if request.query_dict.page is none %}
+		{% set hide_product = true %}
+	{% else %}
+		{% set hide_product = false %}
+	{% endif %}
+
+	{# Retrieve categories #}
+	{% set category_table = hubdb_table_rows(dynamic_page_hubdb_table_id) %}
+
+	{% set categories = [] %}
+
+	{% for row in category_table %}
+		{% if row.category %}
+
+			{# Split on ">" and take the first word #}
+			{% set base_category = row.category|split('>')|first %}
+			
+			{% if base_category not in categories %}
+				{% do categories.append(base_category) %}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+
+	{% set active_category = request.query_dict.category|default('') %}
+
+	<section class="store">
+		<div class="content-wrapper">
 			<div class="store__categories-wrapper">
 				<nav aria-label="Product categories">
 					<ul class="store__categories">
@@ -109,7 +266,7 @@
 									{{ row.price|format_currency_value(locale='en-US', currency='USD', maxDecimalDigits=6, minDecimalDigits=2) }} USD
 								</p>
 								<div class="store__product-desc">
-									{{ row.description }}
+									{{ row.short_description }}
 								</div>
 							</div>
 							<div class="store__product-cta">
@@ -123,7 +280,7 @@
 					<h2>No products found.</h2>
 				{% endif %}
 			</div>
-			
+	
 			<div class="btn__view-more-wrapper {{ !hide_product ? 'btn__view-more-wrapper--hidden' : '' }}">
 				<button class="btn__view-more">
 					View More
@@ -168,6 +325,6 @@
 					</ul>
 				</nav>
 			{% endif %}
-		{% endif %}
-	</div>
-</section>
+		</div>
+	</section>
+{% endif %}

@@ -11,6 +11,14 @@
 <main id="growfast-main-content" class="body-container-wrapper">
 	{% dnd_area 'dnd_area' class='body-container', label='Main section' %}
 		{% dnd_section
+			padding={
+				"default" : {
+					"bottom" : "0px",
+					"left" : "0px",
+					"right" : "0px",
+					"top" : "0px"
+				}
+			},
 			full_width=true
 		%}
 			{% dnd_column 
