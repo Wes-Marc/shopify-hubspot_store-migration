@@ -125,7 +125,7 @@
 		{# Pagination #}
 
 		{% if total_pages >= 1 %}
-			<nav class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}" aria-label="Pagination">
+			<nav id="store-anchor" class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}" aria-label="Pagination">
 				<ul class="pagination">
 					{# Previous #}
 					{% if current_page > 1 %}

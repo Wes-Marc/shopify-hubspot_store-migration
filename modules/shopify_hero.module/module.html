@@ -1,0 +1,92 @@
+{% require_css %}
+	<style>
+		{% scope_css %}
+			.shp_hero__content {
+				{% if module.styles.content.text.text_align == "LEFT" %}
+					align-items: start;
+					align-self: start;
+				{% elif module.styles.content.text.text_align == "RIGHT" %}
+					align-items: end;
+					align-self: end;
+				{% else %}
+					align-items: center;
+					align-self: center;
+				{% endif %}
+				color: {{ module.styles.content.text_color.css }};
+				{{ module.styles.content.text.css|lower if module.styles.content.text.text_align != "JUSTIFY" else "text-align: center;" }}
+			}
+
+			.shp_hero__btn {
+				{% if module.styles.content.btn_position.horizontal_align == "LEFT" %}
+					align-self: start;
+				{% elif module.styles.content.btn_position.horizontal_align == "RIGHT" %}
+					align-self: end;
+				{% else %}
+					align-self: center;
+				{% endif %}
+				background-color: {{ module.styles.button.background_color.css }};
+				{{ module.styles.button.border.css }}
+				border-radius: {{ module.styles.button.border_radius / 16 ~ 'rem'}};
+				color: {{ module.styles.button.text_color.css }};
+				padding-block: {{ module.styles.button.vertical_padding / 16 ~ 'rem' }};
+				padding-inline: {{ module.styles.button.horizontal_padding / 16 ~ 'rem' }};
+			}
+
+			.shp_hero__btn:hover,
+			.shp_hero__btn:focus {
+				background-color: {{ module.styles.button.background_hover_color.css }};
+				{{ module.styles.button.border_hover.css }}
+				color: {{ module.styles.button.text_hover.css }};
+			}
+
+			.shp_hero__bg {
+				{% if module.styles.background.options == "color" %}
+					background-color: {{ module.styles.background.color.css }}
+				{% elif module.styles.background.options == "img" %}
+					{{ module.styles.background.bg_image.css }}
+				{% elif module.styles.background.options == "gradient" %}
+					background: {{ module.styles.background.gradient.css }};
+				{% else %}
+					background: #ffffff;
+				{% endif %}
+			}
+
+			{% if module.styles.background.add_img_overlay %}
+				.shp_hero__bg::before {
+					background: {{ module.styles.background.gradient_overlay.css }};
+					bottom: 0;
+					content: '';
+					left: 0;
+					position: absolute;
+					right: 0;
+					top: 0;
+				}
+			{% endif %}
+		{% end_scope_css %}
+	</style>
+{% end_require_css %}
+
+<section class="shp_hero">
+	<div class="content-wrapper">
+		<div class="shp_hero__content-wrapper">
+			<div class="shp_hero__content">
+				{% if module.hero_title %}
+					<h1 class="shp_hero__title">
+						{{ module.hero_title }}
+					</h1>
+				{% endif %}
+				{% if module.hero_description %}
+					<div class="shp_hero__description">
+						{{ module.hero_description }}
+					</div>
+				{% endif %}
+			</div>
+			{% if module.add_hero_btn %}
+				<button class="shp_hero__btn btn--accent-green btn--small">
+					{{ module.hero_btn_txt }}
+				</button>
+			{% endif %}
+		</div>
+	</div>
+	<div class="shp_hero__bg"></div>
+</section>

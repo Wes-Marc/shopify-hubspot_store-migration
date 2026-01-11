@@ -166,12 +166,16 @@
 
 .store__product-title {
 	font-size: 1.5rem;
+	letter-spacing: var(--letter-spacing-md);
+	line-height: var(--line-height-sm);
 }
 
 .store__product-price {
 	color: var(--color-brand-purple);
 	font-size: 1.125rem;
 	font-weight: 700;
+	letter-spacing: var(--letter-spacing-md);
+	line-height: var(--line-height-md);
 }
 
 .store__product-link,
@@ -185,6 +189,8 @@
 }
 
 .store__product-desc p {
+	letter-spacing: var(--letter-spacing-md);
+	line-height: var(--line-height-md);
 	margin: 0;
 }
 
