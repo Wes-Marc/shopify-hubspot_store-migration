@@ -17,9 +17,13 @@
 	--color-btn-outline-hover: #D9DEE4;
 	--color-btn-outline-secondary: #73305C;
 	--color-btn-outline-secondary-active: #5c2749;
-	--color-brand-purple: #73305C;
-	--color-brand-red: #8E1915;
+	--color-brand-purple: #73305c;
+	--color-brand-red: #8e1915;
 	--color-bg-light: #F6F8FB;
+
+	--letter-spacing-md: 0.04em;
+	--line-height-sm: 1.25;
+	--line-height-md: 1.5;
 }
 
 
@@ -48,7 +52,7 @@
 
 .btn--small {
 	font-size: 1.125rem;
-	line-height: 1.25;
+	line-height: var(--line-height-sm);
 	padding: 0.75rem 1.5625rem;
 }
 
@@ -56,6 +60,7 @@
 	background-color: var(--color-btn-accent);
 	border: 2px solid var(--color-btn-accent);
 	color: #ffffff;
+	font-weight: 700;
 }
 
 .btn--accent-green:hover,

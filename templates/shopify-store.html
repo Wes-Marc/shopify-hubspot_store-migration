@@ -9,33 +9,35 @@
 {% block body %}
 
 <main id="growfast-main-content" class="body-container-wrapper">
-	{# {% dnd_area 'dnd_area' class='body-container', label='Main section' %}
-		{% dnd_section
-			padding={
-				"default" : {
-					"bottom" : "0px",
-					"left" : "0px",
-					"right" : "0px",
-					"top" : "0px"
-				}
-			},
-			full_width=true
-		%}
-			{% dnd_column 
-				offset=0,
-				width=12
+	{% unless dynamic_page_hubdb_row %}
+		{% dnd_area 'dnd_area' class='body-container', label='Hero' %}
+			{% dnd_section
+				padding={
+					"default" : {
+						"bottom" : "0px",
+						"left" : "0px",
+						"right" : "0px",
+						"top" : "0px"
+					}
+				},
+				full_width=true
 			%}
-				{% dnd_row%}
-					{% dnd_module
-						"module_17667943105511"
-						path="/GrowFast_Theme_Shopify_Store/modules/",
-						label="store"
-					%}
-					{% end_dnd_module %}
-				{% end_dnd_row %}
-			{% end_dnd_column %}
-		{% end_dnd_section %}
-	{% end_dnd_area %} #}
+				{% dnd_column
+					offset=0,
+					width=12
+				%}
+					{% dnd_row %}
+						{% dnd_module
+							"module_17681032227331"
+							path="/GrowFast_Theme_Shopify_Store/modules/shopify_hero",
+							label="shopify_hero"
+						%}
+						{% end_dnd_module %}
+					{% end_dnd_row %}
+				{% end_dnd_column %}
+			{% end_dnd_section %}
+		{% end_dnd_area %}
+	{% endunless %}
 
 	{% if dynamic_page_hubdb_row %}
 		{% module "module_17680711718903" path="/GrowFast_Theme_Shopify_Store/modules/shopify_product", label="shopify_product" %}
