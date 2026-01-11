@@ -9,7 +9,7 @@
 {% block body %}
 
 <main id="growfast-main-content" class="body-container-wrapper">
-	{% dnd_area 'dnd_area' class='body-container', label='Main section' %}
+	{# {% dnd_area 'dnd_area' class='body-container', label='Main section' %}
 		{% dnd_section
 			padding={
 				"default" : {
@@ -28,14 +28,21 @@
 				{% dnd_row%}
 					{% dnd_module
 						"module_17667943105511"
-						path="/GrowFast_Theme_Shopify_Store/modules/store",
+						path="/GrowFast_Theme_Shopify_Store/modules/",
 						label="store"
 					%}
 					{% end_dnd_module %}
 				{% end_dnd_row %}
 			{% end_dnd_column %}
 		{% end_dnd_section %}
-	{% end_dnd_area %}
+	{% end_dnd_area %} #}
+
+	{% if dynamic_page_hubdb_row %}
+		{% module "module_17680711718903" path="/GrowFast_Theme_Shopify_Store/modules/shopify_product", label="shopify_product" %}
+	{% elif dynamic_page_hubdb_table_id %}
+		{% module "module_17680711338061" path="/GrowFast_Theme_Shopify_Store/modules/shopify_listing", label="shopify_listing" %}
+	{% endif %}
+
 </main>
 
 {% endblock body %}
