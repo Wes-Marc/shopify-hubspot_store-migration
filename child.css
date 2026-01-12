@@ -27,11 +27,11 @@
 }
 
 
-.content-wrapper {
+.shp-content-wrapper {
 	padding-inline: 1rem;
 }
 @media screen and (min-width: 1200px) {
-	.content-wrapper {
+	.shp-content-wrapper {
 		margin-inline: auto;
 		max-width: 75rem;
 		padding-inline: 0;
