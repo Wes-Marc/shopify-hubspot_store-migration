@@ -9,5 +9,5 @@ btnHero.addEventListener("click", (e) => {
 	}
 	
 	const storeAnchor = document.getElementById("store-anchor");
-	storeAnchor.scrollIntoView({ behavior: "smooth" });
+	storeAnchor.scrollIntoView({ block: "center" ,behavior: "smooth" });
 });
