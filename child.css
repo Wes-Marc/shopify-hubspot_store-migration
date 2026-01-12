@@ -38,6 +38,43 @@
 	}
 }
 
+.shopify__cart-wrapper {
+	align-items: center;
+	display: inline-flex;
+	height: 2.75rem;
+	justify-content: center;
+	width: 2.75rem;
+}
+
+.shopify__cart-icon {
+	height: 100%;
+	position: relative;
+	width: 100%;
+}
+
+.shopify__cart-icon svg {
+	color: var(--color-body-txt);
+}
+
+.shopify__cart-quantity {
+	align-items: center;
+	background-color: var(--color-brand-purple);
+	border-radius: 100%;
+	bottom: 0.5rem;
+	color: #ffffff;
+	display: flex;
+	font-size: 0.5rem;
+	height: 1.0625rem;
+	justify-content: center;
+	position: absolute;
+	right: 0.25rem;
+	width: 1.0625rem;
+}
+
+.shopify__cart-quantity:empty {
+	display: none;
+}
+
 .btn--category {
 	display: inline-block;
 	border-radius: 6.25rem;
