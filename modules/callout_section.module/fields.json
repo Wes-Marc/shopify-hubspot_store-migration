@@ -1,0 +1,341 @@
+[
+    {
+        "name": "callout_title",
+        "label": "Title",
+        "required": false,
+        "locked": false,
+        "validation_regex": "",
+        "validation_error_message": "",
+        "allow_new_line": true,
+        "show_emoji_picker": false,
+        "type": "text",
+        "placeholder": "",
+        "inline_help_text": "",
+        "help_text": "",
+        "default": "Headline lorem ipsum dolor sit amet"
+    },
+    {
+        "name": "callout_description",
+        "label": "Description",
+        "required": false,
+        "locked": false,
+        "type": "richtext",
+        "inline_help_text": "",
+        "help_text": "",
+        "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>"
+    },
+    {
+        "id": "add_callout_btn",
+        "name": "add_callout_btn",
+        "label": "Add button",
+        "required": false,
+        "locked": false,
+        "display": "toggle",
+        "type": "boolean",
+        "inline_help_text": "",
+        "help_text": "",
+        "default": true
+    },
+    {
+        "name": "callout_btn_txt",
+        "label": "Button text",
+        "required": true,
+        "locked": false,
+        "validation_regex": "",
+        "validation_error_message": "",
+        "allow_new_line": false,
+        "show_emoji_picker": false,
+        "type": "text",
+        "placeholder": "",
+        "inline_help_text": "",
+        "help_text": "",
+        "visibility": {
+            "controlling_field_path": "add_callout_btn",
+            "controlling_value_regex": "true",
+            "operator": "EQUAL"
+        },
+        "default": "Button Text"
+    },
+    {
+        "name": "callout_btn_link",
+        "label": "Button link",
+        "required": false,
+        "locked": false,
+        "supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
+        "type": "link",
+        "inline_help_text": "",
+        "help_text": "",
+        "visibility": {
+            "controlling_field_path": "add_callout_btn",
+            "controlling_value_regex": "true",
+            "operator": "EQUAL"
+        },
+        "default": {
+            "url": {
+                "content_id": null,
+                "type": "EXTERNAL",
+                "href": ""
+            },
+            "open_in_new_tab": false,
+            "no_follow": false
+        }
+    },
+    {
+        "name": "styles",
+        "label": "Styles",
+        "children": [
+            {
+                "name": "background",
+                "label": "Background",
+                "required": false,
+                "locked": false,
+                "children": [
+                    {
+                        "name": "options",
+                        "label": "Background type",
+                        "required": false,
+                        "locked": false,
+                        "display": "radio",
+                        "inline_help_text": "",
+                        "help_text": "",
+                        "choices": [
+                            ["color", "Color"],
+                            ["gradient", "Gradient"]
+                        ],
+                        "type": "choice",
+                        "placeholder": "",
+                        "default": "color"
+                    },
+                    {
+                        "name": "color",
+                        "label": "Background color",
+                        "required": false,
+                        "locked": false,
+                        "inline_help_text": "",
+                        "help_text": "",
+                        "type": "color",
+                        "visibility": {
+                            "controlling_field_path": "styles.background.options",
+                            "controlling_value_regex": "color",
+                            "operator": "EQUAL"
+                        },
+                        "default": {
+                            "color": "#73305c",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "name": "gradient",
+                        "label": "Gradient",
+                        "required": false,
+                        "locked": false,
+                        "type": "gradient",
+                        "inline_help_text": "",
+                        "help_text": "",
+                        "visibility": {
+                            "controlling_field_path": "styles.background.options",
+                            "controlling_value_regex": "gradient",
+                            "operator": "EQUAL"
+                        },
+                        "default": {
+                            "colors": [
+                                {
+                                    "color": {
+                                        "r": 142,
+                                        "g": 25,
+                                        "b": 21,
+                                        "a": 1
+                                    }
+                                },
+                                {
+                                    "color": {
+                                        "r": 115,
+                                        "g": 48,
+                                        "b": 92,
+                                        "a": 1
+                                    }
+                                }
+                            ],
+                            "side_or_corner": {
+                                "verticalSide": null,
+                                "horizontalSide": "RIGHT"
+                            }
+                        }
+                    }
+                ],
+                "type": "group",
+                "inline_help_text": "",
+                "help_text": "",
+                "default": {}
+            },
+            {
+                "label": "Button",
+                "name": "button",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Background color",
+                        "name": "background_color",
+                        "type": "color",
+                        "default": {
+                            "color": "#049B91",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Background hover color",
+                        "name": "background_hover_color",
+                        "type": "color",
+                        "default": {
+                            "color": "#ffffff",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Text color",
+                        "name": "text_color",
+                        "type": "color",
+                        "visibility": {
+                            "hidden_subfields": {
+                                "opacity": true
+                            }
+                        },
+                        "default": {
+                            "color": "#ffffff"
+                        }
+                    },
+                    {
+                        "label": "Text hover",
+                        "name": "text_hover",
+                        "type": "color",
+                        "visibility": {
+                            "hidden_subfields": {
+                                "opacity": true
+                            }
+                        },
+                        "default": {
+                            "color": "#73305c"
+                        }
+                    },
+                    {
+                        "name": "border",
+                        "label": "Border",
+                        "required": false,
+                        "locked": false,
+                        "inline_help_text": "",
+                        "help_text": "",
+                        "type": "border",
+                        "allow_custom_border_sides": false,
+                        "default": {
+                            "top": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#049B91"
+                            },
+                            "bottom": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#049B91"
+                            },
+                            "left": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#049B91"
+                            },
+                            "right": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#049B91"
+                            }
+                        }
+                    },
+                    {
+                        "name": "border_hover",
+                        "label": "Border hover",
+                        "required": false,
+                        "locked": false,
+                        "inline_help_text": "",
+                        "help_text": "",
+                        "type": "border",
+                        "allow_custom_border_sides": false,
+                        "default": {
+                            "top": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#ffffff"
+                            },
+                            "bottom": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#ffffff"
+                            },
+                            "left": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#ffffff"
+                            },
+                            "right": {
+                                "width": { "value": 2, "units": "px" },
+                                "opacity": 100,
+                                "style": "solid",
+                                "color": "#ffffff"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Corner radius",
+                        "name": "border_radius",
+                        "type": "number",
+                        "display": "slider",
+                        "max": 100,
+                        "min": 0,
+                        "inline_help_text": "The value in pixels (px).",
+                        "default": 12
+                    },
+                    {
+                        "label": "Horizontal padding",
+                        "name": "horizontal_padding",
+                        "type": "number",
+                        "display": "slider",
+                        "max": 100,
+                        "min": 0,
+                        "inline_help_text": "The value in pixels (px).",
+                        "default": 25
+                    },
+                    {
+                        "label": "Vertical padding",
+                        "name": "vertical_padding",
+                        "type": "number",
+                        "display": "slider",
+                        "max": 100,
+                        "min": 0,
+                        "inline_help_text": "The value in pixels (px).",
+                        "default": 12
+                    }
+                ]
+            },
+            {
+                "name": "txt_color",
+                "label": "Text color",
+                "required": false,
+                "locked": false,
+                "inline_help_text": "",
+                "help_text": "",
+                "type": "color",
+                "default": {
+                    "color": "#ffffff",
+                    "opacity": 100
+                }
+            }
+        ],
+        "type": "group",
+        "tab": "STYLE"
+    }
+]
