@@ -4,6 +4,9 @@ const btnViewMore = document.querySelector(".btn__view-more-wrapper")?.firstElem
 const params = new URLSearchParams(window.location.search);
 const hasCategory = params.has('category');
 
+/* Function defined in global js file */
+setCartInHeader();
+
 if (btnFilter) {
 	btnFilter.addEventListener('click', function() {
 		/* Changes the button icon */
