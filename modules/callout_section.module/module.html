@@ -1,0 +1,76 @@
+{% require_css %}
+	<style>
+		{% scope_css %}
+			.callout__content-wrapper {
+				{% if module.styles.background.options == 'color' %}
+					background-color: {{ module.styles.background.color.css }};
+				{% else %}
+					background: {{ module.styles.background.gradient.css }};
+				{% endif %}
+			}
+
+			.callout__content {
+				color: {{ module.styles.txt_color.css }};
+			}
+
+			.callout__btn {
+				background-color: {{ module.styles.button.background_color.css }};
+				{{ module.styles.button.border.css }}
+				border-radius: {{ module.styles.button.border_radius / 16 ~ 'rem'}};
+				color: {{ module.styles.button.text_color.css }};
+				padding-block: {{ module.styles.button.vertical_padding / 16 ~ 'rem' }};
+				padding-inline: {{ module.styles.button.horizontal_padding / 16 ~ 'rem' }};
+			}
+
+			.callout__btn:hover,
+			.callout__btn:focus {
+				background-color: {{ module.styles.button.background_hover_color.css }};
+				{{ module.styles.button.border_hover.css }}
+				color: {{ module.styles.button.text_hover.css }};
+			}
+		{% end_scope_css %}
+	</style>
+{% end_require_css %}
+
+<section class="callout">
+	<div class="content-wrapper">
+		<div class="callout__content-wrapper">
+			<div class="callout__content">
+				{% if module.callout_title %}
+					<h2 class="callout__title">
+						{{ module.callout_title }}
+					</h2>
+				{% endif %}
+				{% if module.callout_description %}
+					<div class="callout__description">
+						{{ module.callout_description }}
+					</div>
+				{% endif %}
+			</div>
+			{% if module.add_callout_btn %}
+				{% set href = module.callout_btn_link.url.href %}
+				{% if module.callout_btn_link.url.type is equalto "EMAIL_ADDRESS" %}
+					{% set href = "mailto:" + href %}
+				{% elif module.callout_btn_link.url.type is equalto "PHONE_NUMBER" %}
+					{% set href = "tel:" + href %}
+				{% endif %}
+				<a
+					{% if module.callout_btn_link.url.type is equalto "CALL_TO_ACTION"  %}
+						href="{{ href }}" {# The href here is not escaped as it is not editable and functions as a JavaScript call to the associated CTA #}
+					{% else %}
+						href="{{ href|escape_url }}"
+					{% endif %}
+					{% if module.callout_btn_link.open_in_new_tab %}
+						target="_blank"
+					{% endif %}
+					{% if module.callout_btn_link.rel %}
+						rel="{{ module.callout_btn_link.rel|escape_attr }}"
+					{% endif %}
+					class="callout__btn btn--accent-green btn--small"
+				>
+					{{ module.callout_btn_txt }}
+				</a>
+			{% endif %}
+		</div>
+	</div>
+</section>
