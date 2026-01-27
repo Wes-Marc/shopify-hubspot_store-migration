@@ -187,7 +187,6 @@
 .product__description p {
 	letter-spacing: var(--letter-spacing-md);
 	line-height: var(--line-height-md);
-	margin: 0;
 }
 
 .product__recommended-wrapper {
