@@ -1,4 +1,4 @@
-{% require_js position="footer" %}
+{% require_js %}
 	<script>
 		let productQuantity = 1;
 
@@ -159,3 +159,84 @@
 		{% endif %}
 	</div>
 </section>
+
+{# SEO SCHEMA MARKUP #}
+{% require_js %}
+	{% if product.type is equalto 'Book' %}
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@graph": [
+					{
+						"@type": "Organization",
+						"@id": "https://www.sigmetrix.com/#org",
+						"name": "Sigmetrix",
+						"url": "https://www.sigmetrix.com"
+					},
+					{
+						"@type": "Product",
+						"@id": "{{ content.absolute_url }}#product",
+						"name": "{{ product.name }}",
+						"description": "{{ product.short_description }}",
+						"sku": "{{ product.shopify_id }}",
+						"brand": { "@type": "Brand", "name": "Sigmetrix" },
+						"image": ["{{ product.image.url }}"],
+						"offers": {
+							"@type": "Offer",
+							"url": "{{ content.absolute_url }}",
+							"priceCurrency": "USD",
+							"price": "{{ product.price }}",
+							"availability": "https://schema.org/InStock"
+						},
+						"isRelatedTo": { "@id": "{{ content.absolute_url }}#doc" }
+					},
+					{
+						"@type": "DigitalDocument",
+						"@id": "{{ content.absolute_url }}#doc",
+						"name": "{{ product.name }}",
+						"description": "{{ product.description|sanitize_html("STRIP") }}",
+						"publisher": { "@id": "https://www.sigmetrix.com/#org" }
+					}
+				]
+			}
+		</script>
+	{% else %}
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@graph": [
+					{
+						"@type": "Organization",
+						"@id": "https://www.sigmetrix.com/#org",
+						"name": "Sigmetrix",
+						"url": "https://www.sigmetrix.com"
+					},
+					{
+						"@type": "Product",
+						"@id": "{{ content.absolute_url }}#product",
+						"name": "{{ product.name }}",
+						"description": "{{ product.short_description }}",
+						"sku": "{{ product.shopify_id }}",
+						"brand": { "@type": "Brand", "name": "Sigmetrix" },
+						"image": ["{{ product.image.url }}"],
+						"offers": {
+							"@type": "Offer",
+							"url": "{{ content.absolute_url }}",
+							"priceCurrency": "USD",
+							"price": "{{ product.price }}",
+							"availability": "https://schema.org/InStock"
+						},
+						"isRelatedTo": { "@id": "{{ content.absolute_url }}#course" }
+					},
+					{
+						"@type": "Course",
+						"@id": "{{ content.absolute_url }}#course",
+						"name": "{{ product.name }}",
+						"description": "{{ product.description|sanitize_html("STRIP") }}",
+						"provider": { "@id": "https://www.sigmetrix.com/#org" }
+					}
+				]
+			}
+		</script>
+	{% endif %}
+{% end_require_js %}
