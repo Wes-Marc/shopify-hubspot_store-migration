@@ -7,6 +7,11 @@
 	}
 }
 
+/* Show All Courses button ancor */
+#store-anchor {
+	scroll-margin-top: 7.25rem;
+}
+
 .store__categories-wrapper {
 	margin-block-end: 1.875rem;
 }

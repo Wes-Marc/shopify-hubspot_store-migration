@@ -48,7 +48,7 @@
 {% set active_category = request.query_dict.category|default('') %}
 
 <section class="store">
-	<div class="shp-content-wrapper">
+	<div id="store-anchor" class="shp-content-wrapper">
 		<shopify-store id="shopify-store" store-domain="https://sigmetrix.myshopify.com/"></shopify-store>
 		<shopify-cart id="shopify__cart" target="_blank"></shopify-cart>
 		<div class="store__categories-wrapper">
@@ -127,7 +127,7 @@
 		{# Pagination #}
 
 		{% if total_pages >= 1 %}
-			<nav id="store-anchor" class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}" aria-label="Pagination">
+			<nav class="store__pagination {{ hide_product ? 'store__pagination--hidden' : '' }}" aria-label="Pagination">
 				<ul class="pagination">
 					{# Previous #}
 					{% if current_page > 1 %}
