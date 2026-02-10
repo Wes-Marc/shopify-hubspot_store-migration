@@ -37,7 +37,7 @@
 		<shopify-cart id="shopify__cart" target="_blank"></shopify-cart>
 
 		<div class="product__hero">
-			<div class="product__media">
+			<div class="product__media {{ 'product__media--portrait' if product.type == 'Book' }}">
 				<img
 					class="product__img"
 					src="{{ product.image.url }}"
@@ -126,7 +126,7 @@
 							<div class="store__product-media">
 								<a class="store__product-img-wrapper" href="/{{request.path|split('/')|first}}/{{row.hs_path}}">
 									<img
-										class="store__product-img"
+										class="store__product-img {{ 'store__product-img--contained' if row.type == 'Book' }}"
 										src="{{ row.image.url }}"
 										alt="{{ row.image.altText }}"
 										height="216"
