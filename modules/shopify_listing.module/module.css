@@ -157,6 +157,10 @@
 	transform: scale(1.2);
 }
 
+.store__product-img--contained {
+	object-fit: contain;
+}
+
 .store__product-content {
 	display: flex;
 	flex-direction: column;

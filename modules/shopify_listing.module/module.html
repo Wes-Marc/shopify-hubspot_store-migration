@@ -85,7 +85,7 @@
 						<div class="store__product-media">
 							<a class="store__product-img-wrapper" href="{{request.path}}/{{row.hs_path}}">
 								<img
-									class="store__product-img"
+									class="store__product-img {{ 'store__product-img--contained' if row.type == 'Book' }}"
 									src="{{ row.image.url }}"
 									alt="{{ row.image.altText }}"
 									height="216"
